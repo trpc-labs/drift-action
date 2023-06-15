@@ -1,0 +1,16 @@
+name: "tRPC Tools Action"
+description: "Check your schema for unexpected changes"
+inputs:
+  TRPC_CONFIG_PATH:
+    description: "Path to your trpc config file."
+    required: false
+    default: "trpc.config.ts"
+  GITHUB_TOKEN:
+    description: "GITHUB_TOKEN for authenticating with GitHub API"
+    required: true
+  API_KEY:
+    description: "API_KEY for authenticating to drift"
+    required: true
+runs:
+  using: "node16"
+  main: "dist/index.js"
