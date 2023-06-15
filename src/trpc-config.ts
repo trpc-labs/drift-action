@@ -8,7 +8,8 @@ export function parseTrpcConfig(configContent: string) {
    *  });
    */
 
-  const pattern = /drift:\s*{\s*schemaPath:\s*(?<path>['"][^'"}\s]+['"])/i;
+  const pattern =
+    /drift:\s*{\s*schemaPath:\s*(?:"|')(?<path>[^"'}\s]+)(?:"|')/i;
   const match = configContent.match(pattern);
 
   const schemaPath = match?.groups?.path ?? "trpc/schema.json";
