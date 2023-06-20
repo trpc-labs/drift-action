@@ -20,6 +20,7 @@ export async function postIngestion(schemaPath: string) {
   formData.append("parentHash", await getParentHash());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
+  formData.append("author", await getCommitAuthor());
 
   console.log("Posting ingestion");
   console.log(formData);
@@ -53,9 +54,9 @@ async function getCommitHash(): Promise<string> {
   return stdout.trim();
 }
 
-async function getParentHash(): Promise<string | null> {
+async function getParentHash(): Promise<string> {
   const { stdout } = await execa('git log -1 --format="%P"');
-  return stdout.trim() || null;
+  return stdout.trim();
 }
 
 async function getBranchName(): Promise<string> {
@@ -76,4 +77,9 @@ async function getCommitMessage(): Promise<string> {
 async function getRepositoryUrl(): Promise<string> {
   const { stdout } = await execa("git config --get remote.origin.url");
   return stdout.trim().replace(/\.git$/, "");
+}
+
+async function getCommitAuthor(): Promise<string> {
+  const { stdout } = await execa('git log -1 --format="%an"');
+  return stdout.trim();
 }
