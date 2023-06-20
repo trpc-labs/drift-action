@@ -15,6 +15,8 @@ export async function postIngestion(schemaPath: string) {
 
   formData.append("schema", fileBlob, fileName);
   formData.append("commitHash", await getCommitHash());
+  formData.append("repoUrl", await getRepositoryUrl());
+  formData.append("commitMessage", await getCommitMessage());
   formData.append("parentHash", await getParentHash());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
@@ -64,4 +66,14 @@ async function getBranchName(): Promise<string> {
 async function getBranchRef(): Promise<string> {
   const { stdout } = await execa("git symbolic-ref HEAD");
   return stdout.trim();
+}
+
+async function getCommitMessage(): Promise<string> {
+  const { stdout } = await execa('git log -1 --format="%s"');
+  return stdout.trim();
+}
+
+async function getRepositoryUrl(): Promise<string> {
+  const { stdout } = await execa("git config --get remote.origin.url");
+  return stdout.trim().replace(/\.git$/, "");
 }
