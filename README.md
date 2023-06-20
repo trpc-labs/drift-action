@@ -47,3 +47,15 @@ API_KEY=... pnpm local-run
 ```
 
 Before commiting‚ make sure to run `pnpm build` to compile the workflow to a single executable. You can also run `pnpm dev` and it will build automatically on changes.
+
+## Releasing
+
+> Note: You must have the `gh` CLI installed to use this script.
+
+To release a new version, run the `release` command and append the version tag:
+
+```bash
+pnpm release v0.3.4
+```
+
+The above command would build, commit, push and create a release tagged as `v0.3.4`.
