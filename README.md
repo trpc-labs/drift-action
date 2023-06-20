@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Upload schema
-        uses: trpc-labs/action@v0.1.1
+        uses: trpc-labs/action@v0.3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API_KEY: ${{ secrets.DRIFT_API_KEY }}
