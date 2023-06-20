@@ -6,7 +6,8 @@
   "scripts": {
     "build": "ncc build src/index.ts  -o dist -m --license licenses.txt --source-map",
     "dev": "pnpm build -w",
-    "local-run": "tsx src/index"
+    "local-run": "tsx src/index",
+    "release": "pnpm build && git add . && git commit -m 'release' && git push && gh release create $2 --title '$2' --notes ''"
   },
   "devDependencies": {
     "@types/node": "^18.16.0",

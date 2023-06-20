@@ -56,6 +56,7 @@ async function getCommitHash(): Promise<string> {
 
 async function getParentHash(): Promise<string> {
   const { stdout } = await execa('git log -1 --format="%P"');
+  console.log("parent hash", stdout);
   return stdout.trim();
 }
 
