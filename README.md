@@ -2,7 +2,7 @@
 
 ## Usage
 
-1. Generate an API Key from the project's dashboard.
+1. Generate an API Key from the project's dashboard..
 2. Create a workflow like this:
 
 ```yaml
