@@ -20,7 +20,7 @@ export async function postIngestion(schemaPath: string) {
   formData.append("parentHash", await getParentHash());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
-  formData.append("author", await getCommitAuthor());
+  formData.append("commitAuthor", await getCommitAuthor());
 
   console.log("Posting ingestion");
   console.log(formData);
