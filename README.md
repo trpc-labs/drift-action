@@ -19,6 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2 # <-- important this is at least 2 to include the parent commit
+
       - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
