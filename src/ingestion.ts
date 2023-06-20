@@ -54,10 +54,9 @@ async function getCommitHash(): Promise<string> {
   return stdout.trim();
 }
 
-async function getParentHash(): Promise<string> {
+async function getParentHash(): Promise<string | null> {
   const { stdout } = await execa('git log -1 --format="%P"');
-  console.log("parent hash", stdout);
-  return stdout.trim();
+  return stdout.trim() || null;
 }
 
 async function getBranchName(): Promise<string> {
