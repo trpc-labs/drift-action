@@ -41,7 +41,7 @@ export function getUrl() {
 
 export async function getSchemaPath() {
   if (isLocalDev) {
-    return "../../../__trpc/schema.json";
+    return "../example-t3-app/__trpc/schema.json";
   }
 
   const trpcConfig = await getFileContent(core.getInput("TRPC_CONFIG_PATH"));
