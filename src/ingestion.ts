@@ -21,6 +21,7 @@ export async function postIngestion(schemaPath: string) {
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
   formData.append("commitAuthor", await getCommitAuthor());
+  formData.append("authorEmail", await getCommitAuthorEmail());
 
   console.log("Posting ingestion");
   console.log(formData);
@@ -81,5 +82,10 @@ async function getRepositoryUrl(): Promise<string> {
 
 async function getCommitAuthor(): Promise<string> {
   const { stdout } = await execa('git log -1 --format="%an"');
+  return stdout.trim();
+}
+
+async function getCommitAuthorEmail(): Promise<string> {
+  const { stdout } = await execa('git log -1 --format="%ae"');
   return stdout.trim();
 }
