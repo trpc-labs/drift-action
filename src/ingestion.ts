@@ -14,10 +14,11 @@ export async function postIngestion(schemaPath: string) {
   const fileName = basename(schemaPath);
 
   formData.append("schema", fileBlob, fileName);
-  formData.append("commitHash", await getCommitHash());
   formData.append("repoUrl", await getRepositoryUrl());
-  formData.append("commitMessage", await getCommitMessage());
+  formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
+  formData.append("treeHash", await getTreeHash());
+  formData.append("commitMessage", await getCommitMessage());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
   formData.append("commitAuthor", await getCommitAuthor());
@@ -87,5 +88,10 @@ async function getCommitAuthor(): Promise<string> {
 
 async function getCommitAuthorEmail(): Promise<string> {
   const { stdout } = await execa('git log -1 --format="%ae"');
+  return stdout.trim();
+}
+
+async function getTreeHash(): Promise<string> {
+  const { stdout } = await execa('git log -1 --format="%T"');
   return stdout.trim();
 }
