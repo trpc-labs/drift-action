@@ -4,6 +4,7 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { getFileContent } from "./github";
 import { parseTrpcConfig } from "./trpc-config";
+import * as path from "node:path";
 
 export const execa = promisify(exec);
 
@@ -45,5 +46,7 @@ export async function getSchemaPath() {
   }
 
   const trpcConfig = await getFileContent(core.getInput("TRPC_CONFIG_PATH"));
-  return parseTrpcConfig(trpcConfig).schemaPath;
+  const trpcConfigDir = path.dirname(trpcConfig);
+  const schemaRelativeConfig = parseTrpcConfig(trpcConfig).schemaPath;
+  return path.join(trpcConfigDir, schemaRelativeConfig);
 }
