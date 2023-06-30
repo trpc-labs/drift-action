@@ -47,7 +47,7 @@ export async function getSchemaPath() {
 
   const configPath = core.getInput("TRPC_CONFIG_PATH");
   const configDir = path.dirname(configPath);
-  const trpcConfig = await getFileContent(core.getInput("TRPC_CONFIG_PATH"));
+  const trpcConfig = await getFileContent(configPath);
   const schemaPath = parseTrpcConfig(trpcConfig).schemaPath;
   return path.join(configDir, schemaPath);
 }
