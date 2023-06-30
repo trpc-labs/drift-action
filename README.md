@@ -55,7 +55,7 @@ Before commiting‚ make sure to run `pnpm build` to compile the workflow to a s
 To release a new version, run the `release` command and append the version tag:
 
 ```bash
-pnpm release v0.3.4
+pnpm release v0.3.7
 ```
 
 The above command would build, commit, push and create a release tagged as `v0.3.4`.
