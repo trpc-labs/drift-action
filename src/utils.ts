@@ -45,8 +45,9 @@ export async function getSchemaPath() {
     return "../example-t3-app/trpc/schema.json";
   }
 
+  const configPath = core.getInput("TRPC_CONFIG_PATH");
+  const configDir = path.dirname(configPath);
   const trpcConfig = await getFileContent(core.getInput("TRPC_CONFIG_PATH"));
-  const trpcConfigDir = path.dirname(trpcConfig);
-  const schemaRelativeConfig = parseTrpcConfig(trpcConfig).schemaPath;
-  return path.join(trpcConfigDir, schemaRelativeConfig);
+  const schemaPath = parseTrpcConfig(trpcConfig).schemaPath;
+  return path.join(configDir, schemaPath);
 }
