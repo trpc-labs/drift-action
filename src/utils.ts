@@ -54,7 +54,15 @@ export async function getSchemaPath() {
 
 export function getPullRequestNumber() {
   if (isLocalDev) {
-    return 1;
+    return null;
   }
-  return gh.context.issue.number ?? gh.context.payload.pull_request?.number;
+
+  console.log(
+    "gh.context.issue and gh.context.payload.pull_request",
+    gh.context.issue,
+    gh.context.payload.pull_request
+  );
+  return (
+    gh.context.issue.number ?? gh.context.payload.pull_request?.number ?? null
+  );
 }
