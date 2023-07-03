@@ -58,4 +58,4 @@ To release a new version, run the `release` command and append the version tag:
 pnpm release v0.3.7
 ```
 
-The above command would build, commit, push and create a release tagged as `v0.3.4`.
+The above command would build, commit, push and create a release tagged as `v0.3.7`.
