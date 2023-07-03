@@ -56,5 +56,5 @@ export function getPullRequestNumber() {
   if (isLocalDev) {
     return 1;
   }
-  return gh.context.issue.number;
+  return gh.context.issue.number ?? gh.context.payload.pull_request?.number;
 }
