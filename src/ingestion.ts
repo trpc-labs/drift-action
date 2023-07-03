@@ -17,7 +17,7 @@ export async function postIngestion(schemaPath: string) {
   formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
   formData.append("treeHash", await getTreeHash());
-  formData.append("pullRequestNumber", getPullRequestNumber());
+  formData.append("pullRequestNumber", getPullRequestNumber() ?? "");
   formData.append("commitMessage", await getCommitMessage());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
