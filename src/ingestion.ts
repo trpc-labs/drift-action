@@ -1,4 +1,4 @@
-import { execa } from "./utils";
+import { execa, getPullRequestNumber } from "./utils";
 import { fetch, FormData } from "undici";
 import { blob } from "node:stream/consumers";
 import { basename } from "node:path";
@@ -14,10 +14,10 @@ export async function postIngestion(schemaPath: string) {
   const fileName = basename(schemaPath);
 
   formData.append("schema", fileBlob, fileName);
-  formData.append("repoUrl", await getRepositoryUrl());
   formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
   formData.append("treeHash", await getTreeHash());
+  formData.append("pullRequestNumber", getPullRequestNumber());
   formData.append("commitMessage", await getCommitMessage());
   formData.append("branchName", await getBranchName());
   formData.append("branchRef", await getBranchRef());
@@ -74,11 +74,6 @@ async function getBranchRef(): Promise<string> {
 async function getCommitMessage(): Promise<string> {
   const { stdout } = await execa('git log -1 --format="%s"');
   return stdout.trim();
-}
-
-async function getRepositoryUrl(): Promise<string> {
-  const { stdout } = await execa("git config --get remote.origin.url");
-  return stdout.trim().replace(/\.git$/, "");
 }
 
 async function getCommitAuthor(): Promise<string> {

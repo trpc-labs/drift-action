@@ -51,3 +51,10 @@ export async function getSchemaPath() {
   const schemaPath = parseTrpcConfig(trpcConfig).schemaPath;
   return path.join(configDir, schemaPath);
 }
+
+export function getPullRequestNumber() {
+  if (isLocalDev) {
+    return 1;
+  }
+  return gh.context.issue.number;
+}
