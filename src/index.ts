@@ -24,7 +24,8 @@ async function setupGitForIngestion() {
 
   // Get the parent commit
   const { stdout: parentStdout } = await execa("git log -1 --format='%P'");
-  const parentHashes = parentStdout.trim().split(" ");
+  const parentHashes = parentStdout.trim().split(" ").filter(Boolean);
+
   if (parentHashes.length > 1) {
     const parentHash = parentHashes.pop();
 
