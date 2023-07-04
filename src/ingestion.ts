@@ -67,7 +67,9 @@ async function getBranchName(): Promise<string> {
 }
 
 async function getBranchRef(): Promise<string> {
-  const { stdout } = await execa("git symbolic-ref HEAD");
+  const { stdout } = await execa("git symbolic-ref HEAD").catch(() => {
+    return execa("git rev-parse HEAD");
+  });
   return stdout.trim();
 }
 

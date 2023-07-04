@@ -57,12 +57,5 @@ export function getPullRequestNumber() {
     return null;
   }
 
-  console.log(
-    "gh.context.issue and gh.context.payload.pull_request",
-    gh.context.issue,
-    gh.context.payload.pull_request
-  );
-  return (
-    gh.context.issue.number ?? gh.context.payload.pull_request?.number ?? null
-  );
+  return gh.context.issue.number ?? null;
 }
