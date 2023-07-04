@@ -3,7 +3,7 @@ import { fetch, FormData } from "undici";
 import { blob } from "node:stream/consumers";
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
-
+import * as gh from "@actions/github";
 import { getApiKey, getUrl } from "./utils";
 
 export async function postIngestion(schemaPath: string) {
@@ -71,7 +71,12 @@ async function getBranchName(): Promise<string> {
 
 async function getBranchRef(): Promise<string> {
   const { stdout } = await execa("git symbolic-ref HEAD").catch(() => {
-    return execa("git rev-parse HEAD");
+    const fromGh = gh.context.payload.pull_request?.head.ref as
+      | string
+      | undefined;
+    return {
+      stdout: fromGh ?? "",
+    };
   });
   return stdout.trim();
 }
