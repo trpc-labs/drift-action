@@ -66,6 +66,9 @@ async function getParentHash(): Promise<string | null> {
 
 async function getBranchName(): Promise<string> {
   const { stdout } = await execa("git rev-parse --abbrev-ref HEAD");
+  if (stdout.trim() === "HEAD") {
+    return gh.context.payload.pull_request?.head.ref as string;
+  }
   return stdout.trim();
 }
 
