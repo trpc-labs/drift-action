@@ -34,7 +34,6 @@ async function setupGitForIngestion() {
         "Detected merge commit when running with pull_request context. Reverting to parent commit before uploading."
       );
       await execa(`git reset --hard ${parentHash}`);
-      console.log(gh.context.payload.pull_request);
       return;
     }
 

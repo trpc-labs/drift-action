@@ -74,11 +74,8 @@ async function getBranchName(): Promise<string> {
 
 async function getBranchRef(): Promise<string> {
   const { stdout } = await execa("git symbolic-ref HEAD").catch(() => {
-    const fromGh = gh.context.payload.pull_request?.head.ref as
-      | string
-      | undefined;
     return {
-      stdout: fromGh ?? "",
+      stdout: gh.context.payload.pull_request?.head.ref,
     };
   });
   return stdout.trim();
