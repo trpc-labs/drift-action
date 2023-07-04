@@ -1,5 +1,6 @@
 import { postIngestion } from "./ingestion";
 import { execa, getSchemaPath, isGithubPR } from "./utils";
+import * as gh from "@actions/github";
 
 async function run() {
   const schemaPath = await getSchemaPath();
@@ -33,7 +34,7 @@ async function setupGitForIngestion() {
         "Detected merge commit when running with pull_request context. Reverting to parent commit before uploading."
       );
       await execa(`git reset --hard ${parentHash}`);
-      await execa("git checkout -");
+      console.log(gh.context.payload.pull_request);
       return;
     }
 
@@ -42,6 +43,5 @@ async function setupGitForIngestion() {
       "We detected that the latest commit is a merge commit. We don't support merge commits right now so we're going to reset the commit to the parent commit, before uploadthing your schema. Don't worry, this reset will not be pushed to the repo."
     );
     await execa(`git reset --hard ${parentHash}`);
-    await execa("git checkout -");
   }
 }
