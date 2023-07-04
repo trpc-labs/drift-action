@@ -59,3 +59,10 @@ export function getPullRequestNumber() {
 
   return gh.context.issue.number ?? null;
 }
+
+export function isGithubPR() {
+  if (isLocalDev) {
+    return false;
+  }
+  return !!gh.context.payload.pull_request;
+}

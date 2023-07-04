@@ -13,9 +13,6 @@ export async function postIngestion(schemaPath: string) {
   const fileBlob = await blob(fileStream);
   const fileName = basename(schemaPath);
 
-  console.log("Debugging git info");
-  console.log((await execa("git log -5 --pretty=full")).stdout);
-
   formData.append("schema", fileBlob, fileName);
   formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
@@ -70,9 +67,7 @@ async function getBranchName(): Promise<string> {
 }
 
 async function getBranchRef(): Promise<string> {
-  const { stdout } = await execa("git symbolic-ref HEAD").catch(() => {
-    return execa("git rev-parse HEAD");
-  });
+  const { stdout } = await execa("git symbolic-ref HEAD");
   return stdout.trim();
 }
 
