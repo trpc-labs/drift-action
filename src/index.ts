@@ -1,14 +1,13 @@
 import { postIngestion } from "./ingestion";
 import { execa, getSchemaPath, isGithubPR } from "./utils";
-import * as gh from "@actions/github";
 
 async function run() {
-  const schemaPath = await getSchemaPath();
+  const { configDir, schemaPath } = await getSchemaPath();
   console.log("Using schemaPath: ", schemaPath);
 
   await setupGitForIngestion();
 
-  const res = await postIngestion(schemaPath);
+  const res = await postIngestion(configDir, schemaPath);
   console.log(res);
 }
 

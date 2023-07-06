@@ -42,14 +42,17 @@ export function getUrl() {
 
 export async function getSchemaPath() {
   if (isLocalDev) {
-    return "../example-t3-app/trpc/schema.json";
+    return {
+      configDir: "../example-t3-app",
+      schemaPath: "../example-t3-app/trpc/schema.json",
+    };
   }
 
   const configPath = core.getInput("TRPC_CONFIG_PATH");
   const configDir = path.dirname(configPath);
   const trpcConfig = await getFileContent(configPath);
   const schemaPath = parseTrpcConfig(trpcConfig).schemaPath;
-  return path.join(configDir, schemaPath);
+  return { configDir, schemaPath: path.join(configDir, schemaPath) };
 }
 
 export function getPullRequestNumber() {

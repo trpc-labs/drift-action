@@ -6,11 +6,12 @@ import { createReadStream } from "node:fs";
 import * as gh from "@actions/github";
 import { getApiKey, getUrl } from "./utils";
 
-export async function postIngestion(schemaPath: string) {
+export async function postIngestion(configDir: string, schemaPath: string) {
   const formData = new FormData();
 
-  const fileStream = createReadStream(schemaPath);
-  const fileBlob = await blob(fileStream);
+  console.log("Updating schema before ingestion...");
+  await execa("pnpm trpc drift -u", { cwd: configDir });
+  const fileBlob = await blob(createReadStream(schemaPath));
   const fileName = basename(schemaPath);
 
   console.log("Debugging git info");
