@@ -41,6 +41,8 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   formData.append("branchRef", await getBranchRef());
   formData.append("baseBranchRef", getBaseBranchRef());
   formData.append("pullRequestNumber", getPullRequestNumber() ?? "");
+  formData.append("pullRequestTitle", getPullRequestTitle() ?? "");
+  formData.append("pullRequestAuthor", getPullRequestAuthor() ?? "");
 
   console.log("Posting ingestion");
   console.log(formData);
@@ -101,6 +103,20 @@ function getBaseBranchRef() {
     return null;
   }
   return gh.context.payload.pull_request?.base.ref ?? null;
+}
+
+function getPullRequestTitle() {
+  if (isLocalDev) {
+    return null;
+  }
+  return gh.context.payload.pull_request?.title ?? null;
+}
+
+function getPullRequestAuthor() {
+  if (isLocalDev) {
+    return null;
+  }
+  return gh.context.payload.pull_request?.user.login ?? null;
 }
 
 async function getCommitMessage(): Promise<string> {
