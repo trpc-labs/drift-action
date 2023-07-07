@@ -43,6 +43,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   formData.append("pullRequestNumber", getPullRequestNumber() ?? "");
   formData.append("pullRequestTitle", getPullRequestTitle() ?? "");
   formData.append("pullRequestAuthor", getPullRequestAuthor() ?? "");
+  formData.append("pullRequestCommitCount", getPullRequestCommitCount() ?? "");
 
   console.log("Posting ingestion");
   console.log(formData);
@@ -117,6 +118,13 @@ function getPullRequestAuthor() {
     return null;
   }
   return gh.context.payload.pull_request?.user.login ?? null;
+}
+
+function getPullRequestCommitCount() {
+  if (isLocalDev) {
+    return null;
+  }
+  return gh.context.payload.pull_request?.commits ?? null;
 }
 
 async function getCommitMessage(): Promise<string> {
