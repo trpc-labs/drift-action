@@ -96,7 +96,7 @@ async function getBranchRef(): Promise<string> {
   return stdout.trim();
 }
 
-async function getBaseBranchRef() {
+function getBaseBranchRef() {
   if (isLocalDev) {
     return null;
   }
