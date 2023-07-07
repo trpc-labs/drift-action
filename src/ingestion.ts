@@ -17,6 +17,9 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log("Debugging git info");
   console.log((await execa("git log -5 --pretty=full")).stdout);
 
+  console.log("Github context");
+  console.log(gh.context.payload.pull_request);
+
   formData.append("schema", fileBlob, fileName);
   formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
