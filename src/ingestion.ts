@@ -1,10 +1,11 @@
-import { execa, getPullRequestNumber } from "./utils";
+import { execa, getPullRequestNumber, isLocalDev } from "./utils";
 import { fetch, FormData } from "undici";
 import { blob } from "node:stream/consumers";
 import { basename } from "node:path";
 import { createReadStream } from "node:fs";
 import * as gh from "@actions/github";
 import { getApiKey, getUrl } from "./utils";
+import { get } from "node:http";
 
 export async function postIngestion(configDir: string, schemaPath: string) {
   const formData = new FormData();
@@ -20,16 +21,26 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log("Github context");
   console.log(gh.context.payload.pull_request);
 
+  console.log("Other github info");
+  console.log(gh.context);
+  console.log(gh.context.payload);
+
+  // Schema file
   formData.append("schema", fileBlob, fileName);
+
+  // General git metadata
   formData.append("commitHash", await getCommitHash());
   formData.append("parentHash", await getParentHash());
   formData.append("treeHash", await getTreeHash());
-  formData.append("pullRequestNumber", getPullRequestNumber() ?? "");
   formData.append("commitMessage", await getCommitMessage());
-  formData.append("branchName", await getBranchName());
-  formData.append("branchRef", await getBranchRef());
   formData.append("commitAuthor", await getCommitAuthor());
   formData.append("authorEmail", await getCommitAuthorEmail());
+
+  // metadata that's different for commit and PRs
+  formData.append("branchName", await getBranchName());
+  formData.append("branchRef", await getBranchRef());
+  formData.append("baseBranchRef", getBaseBranchRef());
+  formData.append("pullRequestNumber", getPullRequestNumber() ?? "");
 
   console.log("Posting ingestion");
   console.log(formData);
@@ -83,6 +94,13 @@ async function getBranchRef(): Promise<string> {
     };
   });
   return stdout.trim();
+}
+
+async function getBaseBranchRef() {
+  if (isLocalDev) {
+    return null;
+  }
+  return gh.context.payload.pull_request?.base.ref ?? null;
 }
 
 async function getCommitMessage(): Promise<string> {
