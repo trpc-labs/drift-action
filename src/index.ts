@@ -7,7 +7,7 @@ async function run() {
 
   await setupGitForIngestion();
 
-  const res = await postIngestion(schemaPath);
+  const res = await postIngestion(configDir, schemaPath);
   console.log(res);
 }
 

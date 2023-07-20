@@ -5,16 +5,13 @@ import { basename } from "node:path";
 import { createReadStream } from "node:fs";
 import * as gh from "@actions/github";
 import { getApiKey, getUrl } from "./utils";
-import { get } from "node:http";
-import * as fs from "node:fs"
+import { executeCommand } from "./npm";
 
-export async function postIngestion(schemaPath: string) {
+export async function postIngestion(configDir: string, schemaPath: string) {
   const formData = new FormData();
 
-  // Getting schema
-  if (!fs.existsSync(schemaPath)) {
-    throw new Error(`Schema file not found at ${schemaPath} - maybe you need to generate it?`)
-  }
+  console.log("Updating schema before ingestion...");
+  await executeCommand("trpc drift -u", configDir);
 
   const fileBlob = await blob(createReadStream(schemaPath));
   const fileName = basename(schemaPath);
@@ -68,7 +65,9 @@ export async function postIngestion(schemaPath: string) {
     const data = await response.json();
     return data;
   } else {
-    throw new Error(`Failed to upload schema, status ${response.status}:${response.statusText}`)
+    throw new Error(
+      `Failed to upload schema, status ${response.status}:${response.statusText}`
+    );
   }
 }
 
