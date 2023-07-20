@@ -8,7 +8,7 @@ import { getApiKey, getUrl } from "./utils";
 import { get } from "node:http";
 import * as fs from "node:fs"
 
-export async function postIngestion(configDir: string, schemaPath: string) {
+export async function postIngestion(schemaPath: string) {
   const formData = new FormData();
 
   // Getting schema
@@ -68,10 +68,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
     const data = await response.json();
     return data;
   } else {
-    return {
-      status: response.status,
-      message: response.statusText,
-    };
+    throw new Error(`Failed to upload schema, status ${response.status}:${response.statusText}`)
   }
 }
 
