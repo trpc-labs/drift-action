@@ -1,10 +1,10 @@
 import * as core from "@actions/core";
 import * as gh from "@actions/github";
 import { exec } from "node:child_process";
-import { promisify } from "node:util";
-import { getFileContent } from "./github";
-import { parseTrpcConfig } from "./trpc-config";
 import * as path from "node:path";
+import { promisify } from "node:util";
+import { getFileContentFromFilesystem } from "./github";
+import { parseTrpcConfig } from "./trpc-config";
 
 export const execa = promisify(exec);
 
@@ -50,7 +50,7 @@ export async function getSchemaPath() {
 
   const configPath = core.getInput("TRPC_CONFIG_PATH");
   const configDir = path.dirname(configPath);
-  const trpcConfig = await getFileContent(configPath);
+  const trpcConfig = getFileContentFromFilesystem(configPath);
   const schemaPath = parseTrpcConfig(trpcConfig).schemaPath;
   return { configDir, schemaPath: path.join(configDir, schemaPath) };
 }
