@@ -6,12 +6,16 @@ import { createReadStream } from "node:fs";
 import * as gh from "@actions/github";
 import { getApiKey, getUrl } from "./utils";
 import { get } from "node:http";
+import * as fs from "node:fs"
 
 export async function postIngestion(configDir: string, schemaPath: string) {
   const formData = new FormData();
 
-  console.log("Updating schema before ingestion...");
-  await execa("pnpm trpc drift -u", { cwd: configDir });
+  // Getting schema
+  if (!fs.existsSync(schemaPath)) {
+    throw new Error(`Schema file not found at ${schemaPath} - maybe you need to generate it?`)
+  }
+
   const fileBlob = await blob(createReadStream(schemaPath));
   const fileName = basename(schemaPath);
 
