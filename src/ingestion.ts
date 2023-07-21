@@ -13,7 +13,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
 
   console.log('Checking that it is valid json and removing spaces...')
   const contents = fs.readFileSync(schemaPath).toString();
-  const jsonBlob = Uint8Array.from(Buffer.from(JSON.stringify(JSON.parse(contents))));
+  const jsonBlob = Buffer.from(JSON.stringify(JSON.parse(contents)));
 
   const fileName = basename(schemaPath);
 
