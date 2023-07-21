@@ -1,7 +1,7 @@
 import * as gh from "@actions/github";
 import * as fs from "node:fs";
 import { basename } from "node:path";
-import { FormData, fetch } from "undici";
+import { FormData, fetch, File } from "undici";
 import { executeCommand } from "./npm";
 import { execa, getApiKey, getPullRequestNumber, getUrl, isLocalDev } from "./utils";
 
@@ -13,9 +13,8 @@ export async function postIngestion(configDir: string, schemaPath: string) {
 
   console.log('Checking that it is valid json and removing spaces...')
   const contents = fs.readFileSync(schemaPath).toString();
-  const jsonBlob = Buffer.from(JSON.stringify(JSON.parse(contents)));
-
-  const fileName = basename(schemaPath);
+  const jsonContents = JSON.stringify(JSON.parse(contents));
+  const jsonFile = new File([jsonContents], basename(schemaPath));
 
   console.log("Debugging git info");
   console.log((await execa("git log -5 --pretty=full")).stdout);
@@ -28,7 +27,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log(gh.context.payload);
 
   // Schema file
-  formData.append("schema", jsonBlob, fileName);
+  formData.append("schema", jsonFile);
 
   // General git metadata
   formData.append("commitHash", await getCommitHash());
