@@ -13,11 +13,9 @@ export async function postIngestion(configDir: string, schemaPath: string) {
 
   console.log('Checking that it is valid json and removing spaces...')
   const contents = fs.readFileSync(schemaPath).toString();
-  const json = JSON.stringify(JSON.parse(contents));
+  const jsonBlob = Uint8Array.from(Buffer.from(JSON.stringify(JSON.parse(contents))));
 
   const fileName = basename(schemaPath);
-
-  const file = new File([json], fileName);
 
   console.log("Debugging git info");
   console.log((await execa("git log -5 --pretty=full")).stdout);
@@ -30,7 +28,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log(gh.context.payload);
 
   // Schema file
-  formData.append("schema", file);
+  formData.append("schema", jsonBlob, fileName);
 
   // General git metadata
   formData.append("commitHash", await getCommitHash());
