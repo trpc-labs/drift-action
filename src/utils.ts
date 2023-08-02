@@ -45,7 +45,7 @@ export async function getSchemaPath() {
     return {
       configDir: "../example-t3-app",
       // schemaPath: "../example-t3-app/trpc/schema.json",
-      schemaPath: "../../cal.com/packages/trpc/trpc/schema.json",
+      schemaPath: "../../cal.com/packages/trpc/trpc/schema.bin",
     };
   }
 

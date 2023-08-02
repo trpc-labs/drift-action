@@ -3,7 +3,7 @@ export function parseTrpcConfig(configContent: string) {
   /**
    * export default defineConfig({
    *   drift: {
-   *     schemaPath: "__trpc/schema.json",
+   *     schemaPath: "__trpc/schema.bin",
    *   },
    *  });
    */
