@@ -12,7 +12,7 @@ export function parseTrpcConfig(configContent: string) {
     /drift:\s*{\s*schemaPath:\s*(?:"|')(?<path>[^"'}\s]+)(?:"|')/i;
   const match = configContent.match(pattern);
 
-  const schemaPath = match?.groups?.path ?? "trpc/schema.json";
+  const schemaPath = match?.groups?.path ?? "trpc/schema.bin";
   return {
     schemaPath,
   };

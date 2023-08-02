@@ -3,7 +3,13 @@ import * as fs from "node:fs";
 import { basename } from "node:path";
 import { FormData, fetch, File } from "undici";
 import { executeCommand } from "./npm";
-import { execa, getApiKey, getPullRequestNumber, getUrl, isLocalDev } from "./utils";
+import {
+  execa,
+  getApiKey,
+  getPullRequestNumber,
+  getUrl,
+  isLocalDev,
+} from "./utils";
 
 export async function postIngestion(configDir: string, schemaPath: string) {
   const formData = new FormData();
@@ -11,10 +17,8 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log("Updating schema before ingestion...");
   await executeCommand("trpc drift -u", configDir);
 
-  console.log('Checking that it is valid json and removing spaces...')
-  const contents = fs.readFileSync(schemaPath).toString();
-  const jsonContents = JSON.stringify(JSON.parse(contents));
-  const jsonFile = new File([jsonContents], basename(schemaPath));
+  const contents = fs.readFileSync(schemaPath);
+  const schemaFile = new File([contents], basename(schemaPath));
 
   console.log("Debugging git info");
   console.log((await execa("git log -5 --pretty=full")).stdout);
@@ -27,7 +31,7 @@ export async function postIngestion(configDir: string, schemaPath: string) {
   console.log(gh.context.payload);
 
   // Schema file
-  formData.append("schema", jsonFile);
+  formData.append("schema", schemaFile);
 
   // General git metadata
   formData.append("commitHash", await getCommitHash());
