@@ -1,5 +1,7 @@
 # Action for checking your schema
 
+> DEPRECATED: Use `upload` command in the CLI instead
+
 ## Usage
 
 1. Generate an API Key from the project's dashboard...
